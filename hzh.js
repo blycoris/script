@@ -1,3 +1,4 @@
+const notify = require('./sendNotify'); // 确保 sendNotify.js 在相同目录下
 const axios = require("axios");
 const HZH_Token = process.env.HZH_Token;
 
