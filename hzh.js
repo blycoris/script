@@ -63,6 +63,73 @@ async function checkStatus() {
 
 (async () => {
     await signin();
+    async function signin() {
+    try {
+        const response = await axios.post(
+            "https://hweb-mbf.huazhu.com/api/signIn",
+            `state=1&day=${new Date().getDate()}`,
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Client-Platform": "APP-IOS",
+                    "User-Token": HZH_Token,
+                },
+            }
+        );
+        
+        const result = response.data;
+        if (result.businessCode === "1000") {
+            if (result.content.success) {
+                const msg = `✅ 签到成功! 获得积分: ${result.content.point}`;
+                console.log(msg);
+                await notify.sendNotify("华住签到", msg);
+            } else if (result.content.isSign) {
+                const msg = "⏳ 已签到，请勿重复签到";
+                console.log(msg);
+                await notify.sendNotify("华住签到", msg);
+            }
+        } else {
+            const msg = `❌ 签到失败: ${result.message}`;
+            console.log(msg);
+            await notify.sendNotify("华住签到", msg);
+        }
+    } catch (error) {
+        const msg = `❌ 签到请求失败: ${error.message}`;
+        console.error(msg);
+        await notify.sendNotify("华住签到", msg);
+    }
+}
+
+async function checkStatus() {
+    try {
+        const response = await axios.post(
+            "https://hweb-mbf.huazhu.com/api/getPoint",
+            {},
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Client-Platform": "APP-IOS",
+                    "User-Token": HZH_Token,
+                },
+            }
+        );
+        
+        const result = response.data;
+        if (result.businessCode === "1000") {
+            const msg = `📊 当前积分: ${result.content.point}`;
+            console.log(msg);
+            await notify.sendNotify("华住积分查询", msg);
+        } else {
+            const msg = "❌ 获取积分失败，请重新登录";
+            console.log(msg);
+            await notify.sendNotify("华住积分查询", msg);
+        }
+    } catch (error) {
+        const msg = `❌ 获取积分请求失败: ${error.message}`;
+        console.error(msg);
+        await notify.sendNotify("华住积分查询", msg);
+    }
+}
     await checkStatus();
 })();
 
