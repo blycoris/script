@@ -1,5 +1,7 @@
-# cron:11 10 * * *
-# new Env("华住会签到")
+/*
+ * 华住会签到
+ * cron:11 10 * * *
+ */
 
 const notify = require('./sendNotify'); // 确保 sendNotify.js 在相同目录下
 const axios = require("axios");
