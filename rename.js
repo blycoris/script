@@ -255,11 +255,11 @@ function operator(pro) {
       e.name.includes(key)
     )
     
-    let firstName = "Yecao |",
+    let firstName = "",
       nNames = "";
 
     if (nf) {
-      firstName = "Yecao |" + FNAME;
+      firstName = FNAME;
     } else {
       nNames = FNAME;
     }
